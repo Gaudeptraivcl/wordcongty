@@ -34,8 +34,8 @@ function runs(x, o) {
 const P = (x, o = {}) => new Paragraph({
   children: runs(x, o),
   alignment: o.c ? AlignmentType.CENTER : o.right ? AlignmentType.RIGHT : o.left ? AlignmentType.LEFT : AlignmentType.JUSTIFIED,
-  spacing: { before: o.before ?? 40, after: o.after ?? 40, line: o.line ?? 276 },
-  indent: o.ind ? { firstLine: o.ind } : o.left2 ? { left: o.left2 } : undefined,
+  spacing: { before: o.before ?? 0, after: o.after ?? 120, line: o.line ?? 240 },
+  indent: o.left2 ? { left: o.left2 } : (o.c || o.right || o.left || o.noInd) ? undefined : { firstLine: o.ind ?? 567 },
   keepNext: o.keepNext,
   tabStops: o.tabs,
 });
@@ -43,16 +43,17 @@ const B = t => r(t, { b: true });
 const I = t => r(t, { i: true });
 const BI = t => r(t, { b: true, i: true });
 const dotTab = () => new PositionalTab({ alignment: PositionalTabAlignment.RIGHT, relativeTo: PositionalTabRelativeTo.MARGIN, leader: PositionalTabLeader.DOT });
-const dots = (label = '', o = {}) => new Paragraph({ children: [...runs(label, o), r('\t')], tabStops: [{ type: TabStopType.RIGHT, position: W, leader: 'dot' }], spacing: { before: 40, after: 40, line: 276 } });
-const H = t => P([B(t)], { before: 100, after: 40, keepNext: true });
-const pb = () => new Paragraph({ children: [new PageBreak()] });
+const dots = (label = '', o = {}) => new Paragraph({ children: [...runs(label, o), r('\t')], tabStops: [{ type: TabStopType.RIGHT, position: o.w ?? W, leader: 'dot' }], spacing: { before: 0, after: 120, line: 240 }, indent: o.w ? undefined : { firstLine: 567 } });
+const H = t => P([B(t)], { keepNext: true });
+const PB = Symbol('pagebreak');
+const pb = () => PB; // mỗi biểu mẫu là một section riêng, bắt đầu trang mới
 const blank = (n = 1) => Array.from({ length: n }, () => P(''));
 
 // Người tham gia: "- Ông/Bà: ......  Chức vụ: ......"
 const person = (name = '', role = '') => new Paragraph({
   children: [r('- Ông (Bà): ' + (name || '')), r('\tChức vụ: ' + (role || '')), ...(role ? [] : [r('\t')])],
   tabStops: [{ type: TabStopType.LEFT, position: 4700, leader: name ? 'none' : 'dot' }, { type: TabStopType.RIGHT, position: W - 284, leader: 'dot' }],
-  spacing: { before: 30, after: 30, line: 276 }, indent: { left: 284 },
+  spacing: { before: 0, after: 120, line: 240 }, indent: { firstLine: 567 },
 });
 
 const NB = { style: BorderStyle.NONE, size: 0, color: 'FFFFFF' };
@@ -67,7 +68,7 @@ function cell(content, w, o = {}) {
     children: ch, width: { size: w, type: WidthType.DXA }, columnSpan: o.span,
     verticalAlign: o.v ?? VerticalAlign.CENTER,
     shading: o.fill ? { type: ShadingType.CLEAR, color: 'auto', fill: o.fill } : undefined,
-    margins: { top: 40, bottom: 40, left: 80, right: 80 },
+    margins: o.m0 ? { top: 0, bottom: 0, left: 0, right: 0 } : { top: 40, bottom: 40, left: 80, right: 80 },
   });
 }
 // Bảng dữ liệu có kẻ khung
@@ -99,31 +100,41 @@ function sig(rowsDef) {
   const w = Math.floor(W / cols);
   return new Table({ width: { size: W, type: WidthType.DXA }, columnWidths: Array.from({ length: cols }, (_, i) => (i === cols - 1 ? W - w * (cols - 1) : w)), borders: noBorders, rows: trs });
 }
+// Đường kẻ ngang nét liền dài len, đặt cân đối trong độ rộng cw (NĐ 30/2020/NĐ-CP, Phụ lục I)
+const hr = (len, cw = W, after = 60) => new Paragraph({
+  children: [], spacing: { before: 0, after, line: 120, lineRule: 'exact' },
+  indent: { left: Math.round((cw - len) / 2), right: Math.round((cw - len) / 2) },
+  border: { bottom: { style: BorderStyle.SINGLE, size: 6, color: '000000', space: 1 } },
+});
 // Quốc hiệu, tiêu ngữ + địa danh ngày tháng
+// Phần đầu văn bản theo NĐ 30/2020/NĐ-CP: ô trái = tên cơ quan chủ quản (thường), tên cơ quan
+// ban hành (đậm), đường kẻ, số ký hiệu; ô phải = Quốc hiệu, Tiêu ngữ, đường kẻ, địa danh ngày tháng.
+const DA_HEAD = { parent: ['DỰ ÁN XỬ LÝ KHẨN CẤP KÈ BIỂN', 'KHU DU LỊCH HẢI TIẾN'], main: ['GÓI THẦU SỐ 06'] };
 function quocHieu(o = {}) {
-  const out = [];
-  if (o.left) {
-    const lw = 4300, rw = W - lw;
-    out.push(new Table({
-      width: { size: W, type: WidthType.DXA }, columnWidths: [lw, rw], borders: noBorders,
-      rows: [new TableRow({ children: [
-        cell([P([B(o.left[0])], { c: true, before: 0, after: 0, sz: 22 }), ...o.left.slice(1).map(t => P(t.startsWith('LIÊN') || t.startsWith('CÔNG TY') ? [B(t)] : t, { c: true, before: 0, after: 0, sz: 22 }))], lw, { v: VerticalAlign.TOP }),
-        cell([P([B('CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM')], { c: true, before: 0, after: 0, sz: 24 }), P([r('Độc lập - Tự do - Hạnh phúc', { b: true, u: true })], { c: true, before: 0, after: 60 }),
-          P([I((o.place || NOI) + ', ngày ..... tháng ..... năm 2026')], { c: true, before: 60, after: 0 })], rw, { v: VerticalAlign.TOP }),
-      ] })],
-    }));
-    return out;
-  }
-  out.push(P([B('CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM')], { c: true, before: 0, after: 0 }));
-  out.push(P([r('Độc lập - Tự do - Hạnh phúc', { b: true, u: true })], { c: true, before: 0, after: 120 }));
-  out.push(P([I((o.place || NOI) + ', ngày ..... tháng ..... năm 2026')], { right: true, before: 0, after: 120 }));
-  return out;
+  const org = o.org || DA_HEAD;
+  const lw = 3200, rw = W - lw, cw = lw, rcw = rw;
+  const left = [
+    ...(org.parent || []).map(t => P(t, { c: true, sz: 24, after: 0 })),
+    ...org.main.map(t => P([B(t)], { c: true, sz: 24, after: 0 })),
+    hr(1300, cw, 60),
+    ...(o.no ? [P('Số: ' + o.no, { c: true, after: 0 })] : []),
+  ];
+  const right = [
+    P([B('CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM')], { c: true, sz: 24, after: 0 }),
+    P([B('Độc lập - Tự do - Hạnh phúc')], { c: true, after: 0 }),
+    hr(3150, rcw, 60),
+    P([I((o.place || NOI) + ', ngày ..... tháng ..... năm 2026')], { c: true, after: 0 }),
+  ];
+  return [new Table({
+    width: { size: W, type: WidthType.DXA }, columnWidths: [lw, rw], borders: noBorders,
+    rows: [new TableRow({ children: [cell(left, lw, { v: VerticalAlign.TOP, m0: true }), cell(right, rw, { v: VerticalAlign.TOP, m0: true })] })],
+  })];
 }
 const formTag = (code, name) => P([I(code + ' – ' + name)], { right: true, before: 0, after: 60, sz: 22 });
-const title = (lines, no) => [
-  ...(no ? [P([B('Số: ' + no)], { c: true, before: 120, after: 0 })] : []),
-  ...lines.map((t, i) => P([B(t)], { c: true, before: i === 0 && !no ? 120 : 0, after: 0, sz: i === 0 ? 28 : SZ })),
-  P('', { after: 60 }),
+const title = (loai, trich) => [
+  P([B(loai)], { c: true, sz: 28, before: 240, after: 0 }),
+  ...(trich ? [P([B(trich)], { c: true, sz: 28, after: 0 })] : []),
+  hr(2400, W, 240),
 ];
 const projInfo = (extra = []) => [
   P([B('Dự án: '), r(DA + '.')]),
@@ -163,7 +174,8 @@ const add = (...x) => x.flat().forEach(e => content.push(e));
 function cover() {
   const box = [
     P([B('CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM')], { c: true, before: 200, after: 0 }),
-    P([r('Độc lập - Tự do - Hạnh phúc', { b: true, u: true })], { c: true, after: 0 }),
+    P([B('Độc lập - Tự do - Hạnh phúc')], { c: true, after: 0 }),
+    hr(3300, W - 600, 0),
     ...blank(2),
     P([B('CHỦ ĐẦU TƯ: ' + CDT.toUpperCase())], { c: true, after: 0 }),
     P([B('TƯ VẤN QUẢN LÝ DỰ ÁN: ' + QLDA.toUpperCase())], { c: true, after: 0 }),
@@ -199,10 +211,9 @@ function cover() {
 // TỜ TRÌNH
 // =====================================================================
 function toTrinh() {
-  add(quocHieu({ left: [...LD_HEAD, '———', 'Số: ......../TTr-HT-TL'], place: 'Thanh Hóa' }));
-  add(P([B('TỜ TRÌNH')], { c: true, sz: 28, before: 240, after: 0 }));
-  add(P([BI('"Về việc chấp thuận Bộ biểu mẫu biên bản nghiệm thu và hồ sơ quản lý chất lượng thi công xây dựng áp dụng cho Gói thầu số 06: Thi công xây dựng (Bao gồm bảo hiểm công trình, đảm bảo ATGT). Công trình: ' + DA + '"')], { c: true, after: 160 }));
-  add(P([B('Kính gửi:')], { left2: 1400, after: 0 }));
+  add(quocHieu({ org: { main: LD_HEAD }, no: '......../TTr-HT-TL', place: 'Thanh Hóa' }));
+  add(title('TỜ TRÌNH', 'Về việc chấp thuận Bộ biểu mẫu biên bản nghiệm thu và hồ sơ quản lý chất lượng thi công xây dựng áp dụng cho Gói thầu số 06: Thi công xây dựng (Bao gồm bảo hiểm công trình, đảm bảo ATGT). Công trình: ' + DA));
+  add(P('Kính gửi:', { left2: 1400, after: 0 }));
   add(P('- UBND xã Hoằng Tiến (Chủ đầu tư);', { left2: 2400, before: 0, after: 0 }));
   add(P('- ' + QLDA + ' (Tư vấn quản lý dự án);', { left2: 2400, before: 0, after: 0 }));
   add(P('- ' + TVGS + ' (Tư vấn giám sát).', { left2: 2400, before: 0, after: 160 }));
@@ -218,17 +229,17 @@ function toTrinh() {
   add(P('3. Bổ sung các biểu mẫu còn thiếu: Biên bản kiểm tra sự phù hợp năng lực của nhà thầu; Biên bản bàn giao mặt bằng, tim mốc thi công; Biên bản lấy mẫu thí nghiệm; Biên bản bàn giao công trình đưa vào sử dụng.', { ind: 567 }));
   add(P('Bộ biểu mẫu gồm 15 mẫu (có Danh mục kèm theo). Liên danh kính đề nghị Chủ đầu tư, Tư vấn quản lý dự án và Tư vấn giám sát xem xét, chấp thuận để Nhà thầu áp dụng thống nhất cho Gói thầu số 06.', { ind: 567 }));
   add(P([I('(Có Bộ biểu mẫu kèm theo)')], { ind: 567 }));
-  add(P('Xin trân trọng cảm ơn!', { ind: 567, after: 120 }));
+  add(P('Xin trân trọng cảm ơn!', { ind: 567, after: 240 }));
   add(new Table({
     width: { size: W, type: WidthType.DXA }, columnWidths: [4300, W - 4300], borders: noBorders,
     rows: [new TableRow({ children: [
-      cell([P([BI('Nơi nhận:')], { left: true, before: 0, after: 0, sz: 24 }), P([I('- Như kính gửi;')], { left: true, before: 0, after: 0, sz: 22 }), P([I('- Lưu VP.')], { left: true, before: 0, after: 0, sz: 22 })], 4300, { v: VerticalAlign.TOP }),
-      cell([P([B('ĐẠI DIỆN LIÊN DANH')], { c: true, before: 0, after: 0 }), P([B('CÔNG TY TNHH HOÀNG TUẤN')], { c: true, before: 0, after: 0 }), P([B('Giám đốc')], { c: true, before: 0 }), ...blank(4), P([B(GD)], { c: true })], W - 4300, { v: VerticalAlign.TOP }),
+      cell([P([BI('Nơi nhận:')], { left: true, before: 0, after: 0, sz: 24 }), P('- Như Kính gửi;', { left: true, before: 0, after: 0, sz: 22 }), P('- Lưu: VT, VP.', { left: true, before: 0, after: 0, sz: 22 })], 4300, { v: VerticalAlign.TOP }),
+      cell([P([B('ĐẠI DIỆN LIÊN DANH')], { c: true, before: 0, after: 0 }), P([B('CÔNG TY TNHH HOÀNG TUẤN')], { c: true, before: 0, after: 0 }), P([B('GIÁM ĐỐC')], { c: true, before: 0, after: 0 }), ...blank(4), P([B(GD)], { c: true })], W - 4300, { v: VerticalAlign.TOP }),
     ] })],
   }));
   add(P('', { after: 120 }));
   // Ý kiến của TVGS và TVQLDA
-  const op = (t) => cell([P([B(t)], { c: true }), dots(''), dots(''), dots(''), P([I('Ngày ..... tháng ..... năm 2026')], { c: true }), P([I('(Ký, ghi rõ họ tên, chức vụ)')], { c: true }), ...blank(3)], W / 2, { v: VerticalAlign.TOP });
+  const op = (t) => cell([P([B(t)], { c: true }), dots('', { w: W / 2 - 200 }), dots('', { w: W / 2 - 200 }), dots('', { w: W / 2 - 200 }), P([I('Ngày ..... tháng ..... năm 2026')], { c: true }), P([I('(Ký, ghi rõ họ tên, chức vụ)')], { c: true }), ...blank(3)], W / 2, { v: VerticalAlign.TOP });
   add(new Table({ width: { size: W, type: WidthType.DXA }, columnWidths: [W / 2, W / 2], borders: lineBorders, rows: [new TableRow({ cantSplit: true, children: [op('Ý KIẾN CỦA TƯ VẤN GIÁM SÁT'), op('Ý KIẾN CỦA TƯ VẤN QUẢN LÝ DỰ ÁN')] })] }));
   add(pb());
 }
@@ -281,8 +292,8 @@ function danhMuc() {
 // =====================================================================
 function bm01() {
   add(formTag('BM-01', 'Phiếu yêu cầu nghiệm thu'));
-  add(quocHieu({ left: [...LD_HEAD, 'BAN CHỈ HUY CÔNG TRƯỜNG', 'Số: ....../PYCNT-HT-TL'] }));
-  add(title(['PHIẾU YÊU CẦU NGHIỆM THU']));
+  add(quocHieu({ org: { parent: LD_HEAD, main: ['BAN CHỈ HUY CÔNG TRƯỜNG'] }, no: '......../PYCNT-HT-TL' }));
+  add(title('PHIẾU YÊU CẦU NGHIỆM THU'));
   add(projInfo());
   add(P([B('Kính gửi: ')], { after: 0 }));
   add(P('- ' + QLDA + ' (Tư vấn quản lý dự án);', { left2: 1100, before: 0, after: 0 }));
@@ -316,8 +327,8 @@ const P_TK = () => party('Đại diện Nhà thầu thiết kế', '............
 // =====================================================================
 function bm02() {
   add(formTag('BM-02', 'Kiểm tra sự phù hợp năng lực nhà thầu'));
-  add(quocHieu());
-  add(title(['BIÊN BẢN KIỂM TRA SỰ PHÙ HỢP NĂNG LỰC CỦA NHÀ THẦU', 'THI CÔNG XÂY DỰNG SO VỚI HỒ SƠ DỰ THẦU VÀ HỢP ĐỒNG'], '......../BBKT-NL'));
+  add(quocHieu({ no: '......../BBKT-NL' }));
+  add(title('BIÊN BẢN', 'Kiểm tra sự phù hợp năng lực của nhà thầu thi công xây dựng so với hồ sơ dự thầu và hợp đồng'));
   add(projInfo());
   add(H('I. Thành phần tham gia kiểm tra:'));
   add(P_QLDA(), P_TVGS_TRUONG(), P_NT());
@@ -350,8 +361,8 @@ function bm02() {
 // =====================================================================
 function bm03() {
   add(formTag('BM-03', 'Bàn giao mặt bằng, tim mốc'));
-  add(quocHieu());
-  add(title(['BIÊN BẢN BÀN GIAO MẶT BẰNG, TIM MỐC THI CÔNG'], '......../BBBG-MB'));
+  add(quocHieu({ no: '......../BBBG-MB' }));
+  add(title('BIÊN BẢN', 'Bàn giao mặt bằng, tim mốc thi công'));
   add(projInfo([dots('Hạng mục / đoạn tuyến: ')]));
   add(H('I. Thành phần tham gia:'));
   add(P([B('1. Bên giao:')]));
@@ -380,8 +391,8 @@ function bm03() {
 // =====================================================================
 function bm04() {
   add(formTag('BM-04', 'Lấy mẫu thí nghiệm'));
-  add(quocHieu());
-  add(title(['BIÊN BẢN LẤY MẪU THÍ NGHIỆM VẬT LIỆU'], '......../BBLM'));
+  add(quocHieu({ no: '......../BBLM' }));
+  add(title('BIÊN BẢN', 'Lấy mẫu thí nghiệm vật liệu'));
   add(projInfo([dots('Hạng mục sử dụng: ')]));
   add(H('I. Thành phần tham gia:'));
   add(P_TVGS(), P_NT());
@@ -401,8 +412,8 @@ function bm04() {
 // =====================================================================
 function bm05() {
   add(formTag('BM-05', 'Nghiệm thu vật liệu, sản phẩm, cấu kiện, thiết bị'));
-  add(quocHieu());
-  add(title(['BIÊN BẢN NGHIỆM THU VẬT LIỆU, SẢN PHẨM, CẤU KIỆN, THIẾT BỊ', 'TRƯỚC KHI ĐƯA VÀO SỬ DỤNG CHO CÔNG TRÌNH'], '......../BBNT-VL'));
+  add(quocHieu({ no: '......../BBNT-VL' }));
+  add(title('BIÊN BẢN', 'Nghiệm thu vật liệu, sản phẩm, cấu kiện, thiết bị trước khi đưa vào sử dụng cho công trình'));
   add(projInfo([dots('Hạng mục sử dụng: ')]));
   add(H('1. Đối tượng nghiệm thu: ') , P([I('(ghi rõ tên vật liệu, sản phẩm, cấu kiện, thiết bị và lô nghiệm thu)')]));
   add(grid([500, 2000, 1500, 1500, 1000, 1200, 1300], ['TT', 'Tên vật liệu, sản phẩm, cấu kiện, thiết bị', 'Chủng loại, quy cách', 'Nhà sản xuất, xuất xứ', 'Đơn vị', 'Khối lượng (lô)', 'Số sê-ri / số lô (nếu có)'],
@@ -443,8 +454,8 @@ function bm05() {
 // =====================================================================
 function bm07() {
   add(formTag('BM-06', 'Nghiệm thu công việc xây dựng'));
-  add(quocHieu());
-  add(title(['BIÊN BẢN NGHIỆM THU CÔNG VIỆC XÂY DỰNG'], '......../BBNT-CV'));
+  add(quocHieu({ no: '......../BBNT-CV' }));
+  add(title('BIÊN BẢN', 'Nghiệm thu công việc xây dựng'));
   add(projInfo([P([B('Hạng mục: '), I('(ví dụ: Cống hộp đúc sẵn BxH = 2x(1,5x1,5)m ngang kênh tại Km3+500)')])]));
   add(H('1. Tên công việc được nghiệm thu: '), P([I('(ghi rõ tên công việc, vị trí, lý trình; có thể lập chung cho nhiều công việc của một hạng mục theo trình tự thi công)')]));
   add(dots(''));
@@ -496,8 +507,8 @@ function bm07() {
 // =====================================================================
 function bm08() {
   add(formTag('BM-07', 'Nghiệm thu giai đoạn / bộ phận công trình'));
-  add(quocHieu());
-  add(title(['BIÊN BẢN NGHIỆM THU GIAI ĐOẠN THI CÔNG XÂY DỰNG', '(HOẶC BỘ PHẬN CÔNG TRÌNH XÂY DỰNG) HOÀN THÀNH'], '......../BBNT-GĐ'));
+  add(quocHieu({ no: '......../BBNT-GĐ' }));
+  add(title('BIÊN BẢN', 'Nghiệm thu giai đoạn thi công xây dựng (hoặc bộ phận công trình xây dựng) hoàn thành'));
   add(projInfo([dots('Hạng mục: ')]));
   add(H('1. Đối tượng nghiệm thu: '), P([I('(ghi rõ tên giai đoạn thi công / bộ phận công trình, phạm vi, lý trình)')]));
   add(dots(''));
@@ -542,8 +553,8 @@ function bm08() {
 // =====================================================================
 function bm09() {
   add(formTag('BM-08', 'Nghiệm thu hoàn thành hạng mục / công trình'));
-  add(quocHieu());
-  add(title(['BIÊN BẢN NGHIỆM THU HOÀN THÀNH HẠNG MỤC CÔNG TRÌNH', '(CÔNG TRÌNH) XÂY DỰNG ĐỂ ĐƯA VÀO SỬ DỤNG'], '......../BBNT-HT'));
+  add(quocHieu({ no: '......../BBNT-HT' }));
+  add(title('BIÊN BẢN', 'Nghiệm thu hoàn thành hạng mục công trình (công trình) xây dựng để đưa vào sử dụng'));
   add(projInfo());
   add(H('1. Tên hạng mục công trình / công trình xây dựng được nghiệm thu:'));
   add(dots(''));
@@ -601,8 +612,8 @@ function bm09() {
 // =====================================================================
 function bm10() {
   add(formTag('BM-09', 'Bàn giao công trình đưa vào sử dụng'));
-  add(quocHieu());
-  add(title(['BIÊN BẢN BÀN GIAO HẠNG MỤC CÔNG TRÌNH', '(CÔNG TRÌNH) XÂY DỰNG ĐƯA VÀO SỬ DỤNG'], '......../BBBG'));
+  add(quocHieu({ no: '......../BBBG' }));
+  add(title('BIÊN BẢN', 'Bàn giao hạng mục công trình (công trình) xây dựng đưa vào sử dụng'));
   add(projInfo());
   add(H('1. Đối tượng bàn giao: '), dots(''));
   add(H('2. Thành phần:'));
@@ -640,8 +651,8 @@ function bm10() {
 // =====================================================================
 function bm11() {
   add(formTag('BM-10', 'Xác nhận khối lượng hoàn thành'));
-  add(quocHieu());
-  add(title(['BẢNG XÁC NHẬN KHỐI LƯỢNG HOÀN THÀNH THEO HỢP ĐỒNG', '(ĐỀ NGHỊ THANH TOÁN ĐỢT .....)'], '......../XNKL'));
+  add(quocHieu({ no: '......../XNKL' }));
+  add(title('BẢNG XÁC NHẬN', 'Khối lượng hoàn thành theo hợp đồng (đề nghị thanh toán đợt .....)'));
   add(projInfo());
   add(P([B('Hợp đồng: '), r(HD + '.')]));
   add(P([B('Thời kỳ xác nhận: '), r('từ ngày ...../...../2026 đến ngày ...../...../2026.')]));
@@ -663,8 +674,8 @@ function bm11() {
 // =====================================================================
 function bm12() {
   add(formTag('BM-11', 'Kiểm tra, xử lý vi phạm chất lượng'));
-  add(quocHieu());
-  add(title(['BIÊN BẢN KIỂM TRA, XỬ LÝ VI PHẠM CHẤT LƯỢNG', 'TẠI HIỆN TRƯỜNG'], '......../BBVP'));
+  add(quocHieu({ no: '......../BBVP' }));
+  add(title('BIÊN BẢN', 'Kiểm tra, xử lý vi phạm chất lượng tại hiện trường'));
   add(H('1. Đối tượng:'));
   add(projInfo([dots('Hạng mục: '), dots('Lý trình: ')]));
   add(H('2. Thành phần trực tiếp tham gia:'));
@@ -688,8 +699,8 @@ function bm12() {
 // =====================================================================
 function bm13() {
   add(formTag('BM-12', 'Xử lý kỹ thuật hiện trường'));
-  add(quocHieu());
-  add(title(['BIÊN BẢN XỬ LÝ KỸ THUẬT TẠI HIỆN TRƯỜNG'], '......../BBXLKT'));
+  add(quocHieu({ no: '......../BBXLKT' }));
+  add(title('BIÊN BẢN', 'Xử lý kỹ thuật tại hiện trường'));
   add(H('1. Đối tượng:'));
   add(projInfo([dots('Hạng mục: '), dots('Lý trình: ')]));
   add(H('2. Thành phần trực tiếp tham gia:'));
@@ -717,7 +728,8 @@ function bm13() {
 function bm14() {
   add(formTag('BM-13', 'Nhật ký thi công xây dựng công trình'));
   add(P([B('CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM')], { c: true, before: 0, after: 0 }));
-  add(P([r('Độc lập - Tự do - Hạnh phúc', { b: true, u: true })], { c: true, after: 600 }));
+  add(P([B('Độc lập - Tự do - Hạnh phúc')], { c: true, after: 0 }));
+  add(hr(3300, W, 600));
   add(P([B('NHẬT KÝ THI CÔNG XÂY DỰNG CÔNG TRÌNH')], { c: true, sz: 36, after: 120 }));
   add(P([B('QUYỂN SỐ: ............')], { c: true, after: 400 }));
   add(P([B('Dự án: '), r(DA)]));
@@ -789,7 +801,7 @@ function stamp(cols) {
 }
 function bm15() {
   add(formTag('BM-14', 'Bản vẽ hoàn công – mẫu dấu'));
-  add(title(['BẢN VẼ HOÀN CÔNG VÀ MẪU DẤU BẢN VẼ HOÀN CÔNG', '(Theo Phụ lục IIb Nghị định số 207/2026/NĐ-CP)']));
+  add(title('BẢN VẼ HOÀN CÔNG', 'Lập bản vẽ hoàn công và mẫu dấu bản vẽ hoàn công (theo Phụ lục IIb Nghị định số 207/2026/NĐ-CP)'));
   add(H('1. Lập bản vẽ hoàn công:'));
   [
     'a) Bản vẽ hoàn công thể hiện vị trí, kích thước, vật liệu và thiết bị thực tế được sử dụng của công trình, hạng mục công trình, bộ phận công trình đã thi công.',
@@ -812,7 +824,7 @@ function bm15() {
 // =====================================================================
 function bm16() {
   add(formTag('BM-15', 'Danh mục hồ sơ hoàn thành công trình'));
-  add(title(['DANH MỤC HỒ SƠ HOÀN THÀNH CÔNG TRÌNH', '(Theo Điều 28 và Phụ lục VII Nghị định số 207/2026/NĐ-CP)']));
+  add(title('DANH MỤC', 'Hồ sơ hoàn thành công trình (theo Điều 28 và Phụ lục VII Nghị định số 207/2026/NĐ-CP)'));
   add(P([I('Ghi chú: Chủ đầu tư tổ chức lập hồ sơ hoàn thành; mỗi nhà thầu lập và chịu trách nhiệm phần hồ sơ do mình thực hiện. Cột "Tình trạng" ghi: Có / Chưa có / Không thuộc đối tượng.')]));
   const rows = [];
   const grp = (t) => rows.push(['', t, '', '']);
@@ -859,10 +871,15 @@ const doc = new Document({
   creator: NT,
   title: 'Bộ biểu mẫu biên bản nghiệm thu – NĐ 207/2026',
   styles: { default: { document: { run: { font: FONT, size: SZ } } } },
-  sections: [{
-    properties: { page: { size: { width: 11907, height: 16840 }, margin: { top: 1134, right: 1134, bottom: 1134, left: 1701, header: 397, footer: 397 } } },
-    footers: { default: new Footer({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ children: [PageNumber.CURRENT], font: FONT, size: 22 })] })] }) },
-    children: content,
-  }],
+  sections: (() => {
+    const groups = [[]];
+    content.forEach(e => (e === PB ? groups.push([]) : groups[groups.length - 1].push(e)));
+    const header = new Header({ children: [new Paragraph({ alignment: AlignmentType.CENTER, children: [new TextRun({ children: [PageNumber.CURRENT], font: FONT, size: SZ })] })] });
+    return groups.filter(g => g.length).map((g, i) => ({
+      properties: { titlePage: i === 0, page: { size: { width: 11907, height: 16840 }, margin: { top: 1134, right: 1134, bottom: 1134, left: 1701, header: 567, footer: 567 } } },
+      headers: i === 0 ? { default: header, first: new Header({ children: [new Paragraph({ children: [] })] }) } : { default: header },
+      children: g,
+    }));
+  })(),
 });
 Packer.toBuffer(doc).then(b => { fs.writeFileSync(process.argv[2], b); console.log('written', process.argv[2]); });
