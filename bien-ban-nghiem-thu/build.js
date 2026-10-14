@@ -2,7 +2,7 @@ const fs = require('fs');
 const {
   Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, WidthType, AlignmentType,
   BorderStyle, PageBreak, Footer, Header, PageNumber, TabStopType, PositionalTab,
-  PositionalTabAlignment, PositionalTabRelativeTo, PositionalTabLeader, VerticalAlign, ShadingType,
+  PositionalTabAlignment, PositionalTabRelativeTo, PositionalTabLeader, SymbolRun, VerticalAlign, ShadingType,
 } = require('docx');
 
 // ---------- Thông tin dự án (lấy theo file mẫu) ----------
@@ -26,10 +26,19 @@ const FONT = 'Times New Roman';
 const SZ = 26; // 13pt
 
 // ---------- Helpers ----------
-const r = (t, o = {}) => new TextRun({ text: t, bold: o.b, italics: o.i, underline: o.u ? {} : undefined, size: o.sz, font: FONT, break: o.br });
+const r1 = (t, o = {}) => new TextRun({ text: t, bold: o.b, italics: o.i, underline: o.u ? {} : undefined, size: o.sz ?? SZ, font: FONT, language: { value: 'vi-VN' }, break: o.br });
+// Ô vuông "□" dùng ký tự hộp kiểm Wingdings 168 của Word để không bị lỗi font trên máy khác
+const BOX = (o = {}) => new SymbolRun({ char: 'F0A8', symbolfont: 'Wingdings', size: o.sz ?? SZ, bold: o.b, italics: o.i });
+function runsOf(t, o) {
+  const parts = t.split('□');
+  const out = [];
+  parts.forEach((p, i) => { if (i) out.push(BOX(o)); if (p) out.push(r1(p, o)); });
+  return out.length ? out : [r1('', o)];
+}
+const r = (t, o = {}) => (t.includes('□') ? runsOf(t, o) : r1(t, o));
 function runs(x, o) {
-  if (typeof x === 'string') return [r(x, o)];
-  return x.map(e => (typeof e === 'string' ? r(e, o) : e));
+  if (typeof x === 'string') return [r(x, o)].flat();
+  return x.map(e => (typeof e === 'string' ? r(e, o) : e)).flat();
 }
 const P = (x, o = {}) => new Paragraph({
   children: runs(x, o),
@@ -870,7 +879,7 @@ bm09(); bm10(); bm11(); bm12(); bm13(); bm14(); bm15(); bm16();
 const doc = new Document({
   creator: NT,
   title: 'Bộ biểu mẫu biên bản nghiệm thu – NĐ 207/2026',
-  styles: { default: { document: { run: { font: FONT, size: SZ } } } },
+  styles: { default: { document: { run: { font: FONT, size: SZ, language: { value: 'vi-VN' } } } } },
   sections: (() => {
     const groups = [[]];
     content.forEach(e => (e === PB ? groups.push([]) : groups[groups.length - 1].push(e)));
