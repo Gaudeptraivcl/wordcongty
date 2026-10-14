@@ -101,7 +101,7 @@ function sig(rowsDef) {
         ...(s.t2 ? [P([B(s.t2)], { c: true, before: 0, after: 0 })] : []),
         P([I(s.n ?? '(Ký, ghi rõ họ tên, chức vụ)')], { c: true, before: 0, after: 0 }),
         ...blank(4),
-        P([B(s.name || '')], { c: true, before: 0, after: 120 }),
+        P('', { c: true, before: 0, after: 120 }),
       ], ws[i], { v: VerticalAlign.TOP })),
     });
   });
@@ -118,9 +118,16 @@ const hr = (len, cw = W, after = 60) => new Paragraph({
 // Quốc hiệu, tiêu ngữ + địa danh ngày tháng
 // Phần đầu văn bản theo NĐ 30/2020/NĐ-CP: ô trái = tên cơ quan chủ quản (thường), tên cơ quan
 // ban hành (đậm), đường kẻ, số ký hiệu; ô phải = Quốc hiệu, Tiêu ngữ, đường kẻ, địa danh ngày tháng.
-const DA_HEAD = { parent: ['DỰ ÁN XỬ LÝ KHẨN CẤP KÈ BIỂN', 'KHU DU LỊCH HẢI TIẾN'], main: ['GÓI THẦU SỐ 06'] };
 function quocHieu(o = {}) {
-  const org = o.org || DA_HEAD;
+  if (!o.org) {
+    return [
+      P([B('CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM')], { c: true, after: 0 }),
+      P([B('Độc lập - Tự do - Hạnh phúc')], { c: true, after: 0 }),
+      hr(3300, W, 120),
+      P([I((o.place || NOI) + ', ngày ..... tháng ..... năm 2026')], { right: true, after: 0 }),
+    ];
+  }
+  const org = o.org;
   const lw = 3200, rw = W - lw, cw = lw, rcw = rw;
   const left = [
     ...(org.parent || []).map(t => P(t, { c: true, sz: 24, after: 0 })),
@@ -140,8 +147,9 @@ function quocHieu(o = {}) {
   })];
 }
 const formTag = (code, name) => P([I(code + ' – ' + name)], { right: true, before: 0, after: 60, sz: 22 });
-const title = (loai, trich) => [
+const title = (loai, trich, no) => [
   P([B(loai)], { c: true, sz: 28, before: 240, after: 0 }),
+  ...(no ? [P([B('Số: ' + no)], { c: true, after: 0 })] : []),
   ...(trich ? [P([B(trich)], { c: true, sz: 28, after: 0 })] : []),
   hr(2400, W, 240),
 ];
@@ -301,8 +309,8 @@ function danhMuc() {
 // =====================================================================
 function bm01() {
   add(formTag('BM-01', 'Phiếu yêu cầu nghiệm thu'));
-  add(quocHieu({ org: { parent: LD_HEAD, main: ['BAN CHỈ HUY CÔNG TRƯỜNG'] }, no: '......../PYCNT-HT-TL' }));
-  add(title('PHIẾU YÊU CẦU NGHIỆM THU'));
+  add(quocHieu());
+  add(title('PHIẾU YÊU CẦU NGHIỆM THU', null, '......../PYCNT-HT-TL'));
   add(projInfo());
   add(P([B('Kính gửi: ')], { after: 0 }));
   add(P('- ' + QLDA + ' (Tư vấn quản lý dự án);', { left2: 1100, before: 0, after: 0 }));
@@ -315,8 +323,8 @@ function bm01() {
   add(P([B('Hồ sơ kèm theo: '), I('(kết quả thí nghiệm, bản vẽ hoàn công, phiếu đo đạc...)')]));
   const lw = W / 2;
   add(new Table({ width: { size: W, type: WidthType.DXA }, columnWidths: [lw, lw], borders: noBorders, rows: [new TableRow({ cantSplit: true, children: [
-    cell([P([B('Ý KIẾN CỦA TƯ VẤN GIÁM SÁT')], { c: true }), P([I('□ Đồng ý tổ chức nghiệm thu vào hồi ..... giờ ..... ngày ...../...../2026. Yêu cầu Nhà thầu chuẩn bị đầy đủ thiết bị, dụng cụ phục vụ kiểm tra, nghiệm thu.')]), P([I('□ Không đồng ý. Lý do: ...........................................')]), P([I('(Ký, ghi rõ họ tên)')], { c: true }), ...blank(3), P([B('Lê Ngọc Đông')], { c: true })], lw, { v: VerticalAlign.TOP }),
-    cell([P([B('ĐẠI DIỆN NHÀ THẦU THI CÔNG')], { c: true }), P([B('CHỈ HUY TRƯỞNG')], { c: true }), P([I('(Ký, ghi rõ họ tên)')], { c: true }), ...blank(5), P([B('Đinh Trọng Bình')], { c: true })], lw, { v: VerticalAlign.TOP }),
+    cell([P([B('Ý KIẾN CỦA TƯ VẤN GIÁM SÁT')], { c: true }), P([I('□ Đồng ý tổ chức nghiệm thu vào hồi ..... giờ ..... ngày ...../...../2026. Yêu cầu Nhà thầu chuẩn bị đầy đủ thiết bị, dụng cụ phục vụ kiểm tra, nghiệm thu.')]), P([I('□ Không đồng ý. Lý do: ...........................................')]), P([I('(Ký, ghi rõ họ tên)')], { c: true }), ...blank(4)], lw, { v: VerticalAlign.TOP }),
+    cell([P([B('ĐẠI DIỆN NHÀ THẦU THI CÔNG')], { c: true }), P([B('CHỈ HUY TRƯỞNG')], { c: true }), P([I('(Ký, ghi rõ họ tên)')], { c: true }), ...blank(5)], lw, { v: VerticalAlign.TOP }),
   ] })] }));
   add(pb());
 }
@@ -336,8 +344,8 @@ const P_TK = () => party('Đại diện Nhà thầu thiết kế', '............
 // =====================================================================
 function bm02() {
   add(formTag('BM-02', 'Kiểm tra sự phù hợp năng lực nhà thầu'));
-  add(quocHieu({ no: '......../BBKT-NL' }));
-  add(title('BIÊN BẢN', 'Kiểm tra sự phù hợp năng lực của nhà thầu thi công xây dựng so với hồ sơ dự thầu và hợp đồng'));
+  add(quocHieu());
+  add(title('BIÊN BẢN', 'Kiểm tra sự phù hợp năng lực của nhà thầu thi công xây dựng so với hồ sơ dự thầu và hợp đồng', '......../BBKT-NL'));
   add(projInfo());
   add(H('I. Thành phần tham gia kiểm tra:'));
   add(P_QLDA(), P_TVGS_TRUONG(), P_NT());
@@ -370,8 +378,8 @@ function bm02() {
 // =====================================================================
 function bm03() {
   add(formTag('BM-03', 'Bàn giao mặt bằng, tim mốc'));
-  add(quocHieu({ no: '......../BBBG-MB' }));
-  add(title('BIÊN BẢN', 'Bàn giao mặt bằng, tim mốc thi công'));
+  add(quocHieu());
+  add(title('BIÊN BẢN', 'Bàn giao mặt bằng, tim mốc thi công', '......../BBBG-MB'));
   add(projInfo([dots('Hạng mục / đoạn tuyến: ')]));
   add(H('I. Thành phần tham gia:'));
   add(P([B('1. Bên giao:')]));
@@ -400,8 +408,8 @@ function bm03() {
 // =====================================================================
 function bm04() {
   add(formTag('BM-04', 'Lấy mẫu thí nghiệm'));
-  add(quocHieu({ no: '......../BBLM' }));
-  add(title('BIÊN BẢN', 'Lấy mẫu thí nghiệm vật liệu'));
+  add(quocHieu());
+  add(title('BIÊN BẢN', 'Lấy mẫu thí nghiệm vật liệu', '......../BBLM'));
   add(projInfo([dots('Hạng mục sử dụng: ')]));
   add(H('I. Thành phần tham gia:'));
   add(P_TVGS(), P_NT());
@@ -421,8 +429,8 @@ function bm04() {
 // =====================================================================
 function bm05() {
   add(formTag('BM-05', 'Nghiệm thu vật liệu, sản phẩm, cấu kiện, thiết bị'));
-  add(quocHieu({ no: '......../BBNT-VL' }));
-  add(title('BIÊN BẢN', 'Nghiệm thu vật liệu, sản phẩm, cấu kiện, thiết bị trước khi đưa vào sử dụng cho công trình'));
+  add(quocHieu());
+  add(title('BIÊN BẢN', 'Nghiệm thu vật liệu, sản phẩm, cấu kiện, thiết bị trước khi đưa vào sử dụng cho công trình', '......../BBNT-VL'));
   add(projInfo([dots('Hạng mục sử dụng: ')]));
   add(H('1. Đối tượng nghiệm thu: ') , P([I('(ghi rõ tên vật liệu, sản phẩm, cấu kiện, thiết bị và lô nghiệm thu)')]));
   add(grid([500, 2000, 1500, 1500, 1000, 1200, 1300], ['TT', 'Tên vật liệu, sản phẩm, cấu kiện, thiết bị', 'Chủng loại, quy cách', 'Nhà sản xuất, xuất xứ', 'Đơn vị', 'Khối lượng (lô)', 'Số sê-ri / số lô (nếu có)'],
@@ -463,8 +471,8 @@ function bm05() {
 // =====================================================================
 function bm07() {
   add(formTag('BM-06', 'Nghiệm thu công việc xây dựng'));
-  add(quocHieu({ no: '......../BBNT-CV' }));
-  add(title('BIÊN BẢN', 'Nghiệm thu công việc xây dựng'));
+  add(quocHieu());
+  add(title('BIÊN BẢN', 'Nghiệm thu công việc xây dựng', '......../BBNT-CV'));
   add(projInfo([P([B('Hạng mục: '), I('(ví dụ: Cống hộp đúc sẵn BxH = 2x(1,5x1,5)m ngang kênh tại Km3+500)')])]));
   add(H('1. Tên công việc được nghiệm thu: '), P([I('(ghi rõ tên công việc, vị trí, lý trình; có thể lập chung cho nhiều công việc của một hạng mục theo trình tự thi công)')]));
   add(dots(''));
@@ -516,8 +524,8 @@ function bm07() {
 // =====================================================================
 function bm08() {
   add(formTag('BM-07', 'Nghiệm thu giai đoạn / bộ phận công trình'));
-  add(quocHieu({ no: '......../BBNT-GĐ' }));
-  add(title('BIÊN BẢN', 'Nghiệm thu giai đoạn thi công xây dựng (hoặc bộ phận công trình xây dựng) hoàn thành'));
+  add(quocHieu());
+  add(title('BIÊN BẢN', 'Nghiệm thu giai đoạn thi công xây dựng (hoặc bộ phận công trình xây dựng) hoàn thành', '......../BBNT-GĐ'));
   add(projInfo([dots('Hạng mục: ')]));
   add(H('1. Đối tượng nghiệm thu: '), P([I('(ghi rõ tên giai đoạn thi công / bộ phận công trình, phạm vi, lý trình)')]));
   add(dots(''));
@@ -562,8 +570,8 @@ function bm08() {
 // =====================================================================
 function bm09() {
   add(formTag('BM-08', 'Nghiệm thu hoàn thành hạng mục / công trình'));
-  add(quocHieu({ no: '......../BBNT-HT' }));
-  add(title('BIÊN BẢN', 'Nghiệm thu hoàn thành hạng mục công trình (công trình) xây dựng để đưa vào sử dụng'));
+  add(quocHieu());
+  add(title('BIÊN BẢN', 'Nghiệm thu hoàn thành hạng mục công trình (công trình) xây dựng để đưa vào sử dụng', '......../BBNT-HT'));
   add(projInfo());
   add(H('1. Tên hạng mục công trình / công trình xây dựng được nghiệm thu:'));
   add(dots(''));
@@ -621,8 +629,8 @@ function bm09() {
 // =====================================================================
 function bm10() {
   add(formTag('BM-09', 'Bàn giao công trình đưa vào sử dụng'));
-  add(quocHieu({ no: '......../BBBG' }));
-  add(title('BIÊN BẢN', 'Bàn giao hạng mục công trình (công trình) xây dựng đưa vào sử dụng'));
+  add(quocHieu());
+  add(title('BIÊN BẢN', 'Bàn giao hạng mục công trình (công trình) xây dựng đưa vào sử dụng', '......../BBBG'));
   add(projInfo());
   add(H('1. Đối tượng bàn giao: '), dots(''));
   add(H('2. Thành phần:'));
@@ -660,8 +668,8 @@ function bm10() {
 // =====================================================================
 function bm11() {
   add(formTag('BM-10', 'Xác nhận khối lượng hoàn thành'));
-  add(quocHieu({ no: '......../XNKL' }));
-  add(title('BẢNG XÁC NHẬN', 'Khối lượng hoàn thành theo hợp đồng (đề nghị thanh toán đợt .....)'));
+  add(quocHieu());
+  add(title('BẢNG XÁC NHẬN', 'Khối lượng hoàn thành theo hợp đồng (đề nghị thanh toán đợt .....)', '......../XNKL'));
   add(projInfo());
   add(P([B('Hợp đồng: '), r(HD + '.')]));
   add(P([B('Thời kỳ xác nhận: '), r('từ ngày ...../...../2026 đến ngày ...../...../2026.')]));
@@ -683,8 +691,8 @@ function bm11() {
 // =====================================================================
 function bm12() {
   add(formTag('BM-11', 'Kiểm tra, xử lý vi phạm chất lượng'));
-  add(quocHieu({ no: '......../BBVP' }));
-  add(title('BIÊN BẢN', 'Kiểm tra, xử lý vi phạm chất lượng tại hiện trường'));
+  add(quocHieu());
+  add(title('BIÊN BẢN', 'Kiểm tra, xử lý vi phạm chất lượng tại hiện trường', '......../BBVP'));
   add(H('1. Đối tượng:'));
   add(projInfo([dots('Hạng mục: '), dots('Lý trình: ')]));
   add(H('2. Thành phần trực tiếp tham gia:'));
@@ -708,8 +716,8 @@ function bm12() {
 // =====================================================================
 function bm13() {
   add(formTag('BM-12', 'Xử lý kỹ thuật hiện trường'));
-  add(quocHieu({ no: '......../BBXLKT' }));
-  add(title('BIÊN BẢN', 'Xử lý kỹ thuật tại hiện trường'));
+  add(quocHieu());
+  add(title('BIÊN BẢN', 'Xử lý kỹ thuật tại hiện trường', '......../BBXLKT'));
   add(H('1. Đối tượng:'));
   add(projInfo([dots('Hạng mục: '), dots('Lý trình: ')]));
   add(H('2. Thành phần trực tiếp tham gia:'));
