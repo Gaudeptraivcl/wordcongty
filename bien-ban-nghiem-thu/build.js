@@ -215,8 +215,8 @@ function toTrinh() {
   add(P(NT + ' là nhà thầu thi công Gói thầu số 06 thuộc dự án ' + DA + '. Để thống nhất hình thức, nội dung hồ sơ quản lý chất lượng trong suốt quá trình thi công, nghiệm thu và bàn giao công trình theo quy định mới tại Nghị định số 207/2026/NĐ-CP và Thông tư số 32/2026/TT-BXD (thay thế các quy định trước đây tại Nghị định số 06/2021/NĐ-CP), Liên danh đã rà soát, chỉnh sửa bộ biểu mẫu đang sử dụng, cụ thể:', { ind: 567 }));
   add(P('1. Chỉnh sửa căn cứ pháp lý, nội dung và thành phần ký của các biên bản nghiệm thu vật liệu, công việc xây dựng, giai đoạn/bộ phận công trình và hoàn thành hạng mục công trình/công trình theo đúng Điều 14, Điều 22, Điều 23 và Điều 24 Nghị định số 207/2026/NĐ-CP;', { ind: 567 }));
   add(P('2. Loại bỏ các nội dung không còn phù hợp: viện dẫn Nghị định số 06/2021/NĐ-CP; các nội dung dành cho hợp đồng BOT, BTL và "Doanh nghiệp dự án"; thành phần "Cơ quan nhà nước có thẩm quyền" ký biên bản nghiệm thu; biên bản "nghiệm thu thanh toán" (thay bằng Bảng xác nhận khối lượng hoàn thành theo hợp đồng); các mẫu bị trùng số hiệu;', { ind: 567 }));
-  add(P('3. Bổ sung các biểu mẫu còn thiếu: Biên bản kiểm tra sự phù hợp năng lực của nhà thầu; Biên bản bàn giao mặt bằng, tim mốc thi công; Biên bản lấy mẫu thí nghiệm; Biên bản kiểm tra nội bộ của nhà thầu; Biên bản bàn giao công trình đưa vào sử dụng.', { ind: 567 }));
-  add(P('Bộ biểu mẫu gồm 16 mẫu (có Danh mục kèm theo). Liên danh kính đề nghị Chủ đầu tư, Tư vấn quản lý dự án và Tư vấn giám sát xem xét, chấp thuận để Nhà thầu áp dụng thống nhất cho Gói thầu số 06.', { ind: 567 }));
+  add(P('3. Bổ sung các biểu mẫu còn thiếu: Biên bản kiểm tra sự phù hợp năng lực của nhà thầu; Biên bản bàn giao mặt bằng, tim mốc thi công; Biên bản lấy mẫu thí nghiệm; Biên bản bàn giao công trình đưa vào sử dụng.', { ind: 567 }));
+  add(P('Bộ biểu mẫu gồm 15 mẫu (có Danh mục kèm theo). Liên danh kính đề nghị Chủ đầu tư, Tư vấn quản lý dự án và Tư vấn giám sát xem xét, chấp thuận để Nhà thầu áp dụng thống nhất cho Gói thầu số 06.', { ind: 567 }));
   add(P([I('(Có Bộ biểu mẫu kèm theo)')], { ind: 567 }));
   add(P('Xin trân trọng cảm ơn!', { ind: 567, after: 120 }));
   add(new Table({
@@ -242,17 +242,16 @@ const FORMS = [
   ['BM-03', 'Biên bản bàn giao mặt bằng, tim mốc thi công', 'Quy định về quản lý thi công xây dựng – NĐ 207/2026', 'Bổ sung'],
   ['BM-04', 'Biên bản lấy mẫu thí nghiệm vật liệu', 'Điều 14 NĐ 207/2026', 'Bổ sung'],
   ['BM-05', 'Biên bản nghiệm thu vật liệu, sản phẩm, cấu kiện, thiết bị trước khi đưa vào sử dụng', 'Điều 14 NĐ 207/2026', 'Sửa (Mẫu 1 cũ)'],
-  ['BM-06', 'Biên bản kiểm tra nội bộ của nhà thầu', 'Trách nhiệm của nhà thầu thi công – NĐ 207/2026', 'Bổ sung'],
-  ['BM-07', 'Biên bản nghiệm thu công việc xây dựng', 'Điều 22 NĐ 207/2026', 'Sửa (Mẫu 2 cũ)'],
-  ['BM-08', 'Biên bản nghiệm thu giai đoạn thi công xây dựng / bộ phận công trình xây dựng', 'Điều 23 NĐ 207/2026', 'Sửa (Mẫu 3 cũ)'],
-  ['BM-09', 'Biên bản nghiệm thu hoàn thành hạng mục công trình / công trình xây dựng đưa vào sử dụng', 'Điều 24 NĐ 207/2026', 'Sửa, gộp (Mẫu 3* và Mẫu 4 cũ)'],
-  ['BM-10', 'Biên bản bàn giao hạng mục công trình / công trình đưa vào sử dụng', 'Luật Xây dựng; NĐ 207/2026', 'Bổ sung (tách phần bàn giao khỏi Mẫu 4 cũ)'],
-  ['BM-11', 'Bảng xác nhận khối lượng hoàn thành theo hợp đồng (phục vụ thanh toán)', 'Hợp đồng xây dựng', 'Thay thế Mẫu 5 cũ "Nghiệm thu thanh toán"'],
-  ['BM-12', 'Biên bản kiểm tra, xử lý vi phạm chất lượng tại hiện trường', 'NĐ 207/2026', 'Sửa (Mẫu 7 cũ)'],
-  ['BM-13', 'Biên bản xử lý kỹ thuật tại hiện trường', 'NĐ 207/2026', 'Sửa (Mẫu 8 cũ)'],
-  ['BM-14', 'Nhật ký thi công xây dựng công trình', 'Khoản 13 Điều 15, Phụ lục IIa NĐ 207/2026', 'Sửa'],
-  ['BM-15', 'Bản vẽ hoàn công – mẫu dấu bản vẽ hoàn công', 'Phụ lục IIb NĐ 207/2026', 'Sửa'],
-  ['BM-16', 'Danh mục hồ sơ hoàn thành công trình', 'Điều 28, Phụ lục VII NĐ 207/2026', 'Sửa'],
+  ['BM-06', 'Biên bản nghiệm thu công việc xây dựng', 'Điều 22 NĐ 207/2026', 'Sửa (Mẫu 2 cũ)'],
+  ['BM-07', 'Biên bản nghiệm thu giai đoạn thi công xây dựng / bộ phận công trình xây dựng', 'Điều 23 NĐ 207/2026', 'Sửa (Mẫu 3 cũ)'],
+  ['BM-08', 'Biên bản nghiệm thu hoàn thành hạng mục công trình / công trình xây dựng đưa vào sử dụng', 'Điều 24 NĐ 207/2026', 'Sửa, gộp (Mẫu 3* và Mẫu 4 cũ)'],
+  ['BM-09', 'Biên bản bàn giao hạng mục công trình / công trình đưa vào sử dụng', 'Luật Xây dựng; NĐ 207/2026', 'Bổ sung (tách phần bàn giao khỏi Mẫu 4 cũ)'],
+  ['BM-10', 'Bảng xác nhận khối lượng hoàn thành theo hợp đồng (phục vụ thanh toán)', 'Hợp đồng xây dựng', 'Thay thế Mẫu 5 cũ "Nghiệm thu thanh toán"'],
+  ['BM-11', 'Biên bản kiểm tra, xử lý vi phạm chất lượng tại hiện trường', 'NĐ 207/2026', 'Sửa (Mẫu 7 cũ)'],
+  ['BM-12', 'Biên bản xử lý kỹ thuật tại hiện trường', 'NĐ 207/2026', 'Sửa (Mẫu 8 cũ)'],
+  ['BM-13', 'Nhật ký thi công xây dựng công trình', 'Khoản 13 Điều 15, Phụ lục IIa NĐ 207/2026', 'Sửa'],
+  ['BM-14', 'Bản vẽ hoàn công – mẫu dấu bản vẽ hoàn công', 'Phụ lục IIb NĐ 207/2026', 'Sửa'],
+  ['BM-15', 'Danh mục hồ sơ hoàn thành công trình', 'Điều 28, Phụ lục VII NĐ 207/2026', 'Sửa'],
 ];
 function danhMuc() {
   add(P([B('DANH MỤC BIỂU MẪU')], { c: true, sz: 28, before: 0, after: 0 }));
@@ -260,10 +259,10 @@ function danhMuc() {
   add(grid([600, 1000, 3600, 2200, 2000], ['TT', 'Ký hiệu', 'Tên biểu mẫu', 'Căn cứ', 'Ghi chú'], FORMS.map((f, i) => [String(i + 1), ...f])));
   add(H('Các mẫu loại bỏ khỏi bộ mẫu cũ và lý do:'));
   [
-    '- Mẫu 5 "Biên bản nghiệm thu thanh toán khối lượng xây lắp hoàn thành": Nghị định số 207/2026/NĐ-CP không quy định loại nghiệm thu này. Việc xác định khối lượng thanh toán thực hiện theo hợp đồng và quy định về hợp đồng xây dựng, nên thay bằng Bảng xác nhận khối lượng hoàn thành (BM-11).',
-    '- Mẫu 6 "Phiếu yêu cầu nghiệm thu, nhật ký thi công": chỉ có tiêu đề, không có nội dung. Đã thay bằng BM-01 và BM-14.',
-    '- Mẫu 7 "Hồ sơ hoàn công công trình" bị trùng số hiệu với Mẫu 7 "Xử lý vi phạm": đánh số lại thành BM-15 và BM-16.',
-    '- Mẫu 3* "Nghiệm thu hoàn thành công trình" trùng nội dung với Mẫu 4 và có ghi chú dành cho hợp đồng BOT, BTL: gộp vào BM-09.',
+    '- Mẫu 5 "Biên bản nghiệm thu thanh toán khối lượng xây lắp hoàn thành": Nghị định số 207/2026/NĐ-CP không quy định loại nghiệm thu này. Việc xác định khối lượng thanh toán thực hiện theo hợp đồng và quy định về hợp đồng xây dựng, nên thay bằng Bảng xác nhận khối lượng hoàn thành (BM-10).',
+    '- Mẫu 6 "Phiếu yêu cầu nghiệm thu, nhật ký thi công": chỉ có tiêu đề, không có nội dung. Đã thay bằng BM-01 và BM-13.',
+    '- Mẫu 7 "Hồ sơ hoàn công công trình" bị trùng số hiệu với Mẫu 7 "Xử lý vi phạm": đánh số lại thành BM-14 và BM-15.',
+    '- Mẫu 3* "Nghiệm thu hoàn thành công trình" trùng nội dung với Mẫu 4 và có ghi chú dành cho hợp đồng BOT, BTL: gộp vào BM-08.',
     '- Thành phần "Cơ quan nhà nước có thẩm quyền" ký biên bản nghiệm thu hoàn thành: cơ quan chuyên môn về xây dựng chỉ kiểm tra công tác nghiệm thu và ra văn bản thông báo kết quả kiểm tra, không ký biên bản nghiệm thu của chủ đầu tư.',
     '- Các cụm từ "Doanh nghiệp dự án", "Nghị định 06/2021/NĐ-CP" và tiêu chuẩn TCVN 5308:1991 (đã được thay bằng QCVN 18:2021/BXD).',
   ].forEach(t => add(P(t, { ind: 0 })));
@@ -288,12 +287,12 @@ function bm01() {
   add(P([B('Kính gửi: ')], { after: 0 }));
   add(P('- ' + QLDA + ' (Tư vấn quản lý dự án);', { left2: 1100, before: 0, after: 0 }));
   add(P('- ' + TVGS + ' (Tư vấn giám sát).', { left2: 1100, before: 0, after: 60 }));
-  add(P('Căn cứ Điều 22 (Điều 23, Điều 24) Nghị định số 207/2026/NĐ-CP ngày 15/6/2026 của Chính phủ; căn cứ kết quả kiểm tra nội bộ số ....... ngày ......., Nhà thầu đã hoàn thành và tự kiểm tra đạt yêu cầu các công việc dưới đây. Đề nghị Tư vấn giám sát (Tư vấn quản lý dự án) kiểm tra hiện trường và tổ chức nghiệm thu:', { ind: 567 }));
+  add(P('Căn cứ Điều 22 (Điều 23, Điều 24) Nghị định số 207/2026/NĐ-CP ngày 15/6/2026 của Chính phủ; căn cứ kết quả tự kiểm tra của Nhà thầu, Nhà thầu đã hoàn thành và tự kiểm tra đạt yêu cầu các công việc dưới đây. Đề nghị Tư vấn giám sát (Tư vấn quản lý dự án) kiểm tra hiện trường và tổ chức nghiệm thu:', { ind: 567 }));
   add(P([B('Cấp nghiệm thu: '), r('□ Vật liệu, sản phẩm, thiết bị   □ Công việc xây dựng   □ Giai đoạn / bộ phận công trình   □ Hoàn thành hạng mục / công trình')]));
   add(grid([500, 2600, 2300, 1900, 1700], ['TT', 'Tên đối tượng / công việc đề nghị nghiệm thu', 'Vị trí, lý trình, khối lượng', 'Thời gian đề nghị', 'Hồ sơ kèm theo'],
     [['1', '', '', '..... giờ ..... ngày ...../...../2026', ''], ['2', '', '', '', ''], ['3', '', '', '', '']]));
   add(P('Nhà thầu cam kết đã thi công đúng hồ sơ thiết kế được phê duyệt, chỉ dẫn kỹ thuật và tiêu chuẩn áp dụng; đã chuẩn bị đầy đủ nhân lực, thiết bị, dụng cụ đo kiểm và hồ sơ phục vụ công tác nghiệm thu.', { ind: 567, before: 100 }));
-  add(P([B('Hồ sơ kèm theo: '), I('(biên bản kiểm tra nội bộ, kết quả thí nghiệm, bản vẽ hoàn công, phiếu đo đạc...)')]));
+  add(P([B('Hồ sơ kèm theo: '), I('(kết quả thí nghiệm, bản vẽ hoàn công, phiếu đo đạc...)')]));
   const lw = W / 2;
   add(new Table({ width: { size: W, type: WidthType.DXA }, columnWidths: [lw, lw], borders: noBorders, rows: [new TableRow({ cantSplit: true, children: [
     cell([P([B('Ý KIẾN CỦA TƯ VẤN GIÁM SÁT')], { c: true }), P([I('□ Đồng ý tổ chức nghiệm thu vào hồi ..... giờ ..... ngày ...../...../2026. Yêu cầu Nhà thầu chuẩn bị đầy đủ thiết bị, dụng cụ phục vụ kiểm tra, nghiệm thu.')]), P([I('□ Không đồng ý. Lý do: ...........................................')]), P([I('(Ký, ghi rõ họ tên)')], { c: true }), ...blank(3), P([B('Lê Ngọc Đông')], { c: true })], lw, { v: VerticalAlign.TOP }),
@@ -371,7 +370,7 @@ function bm03() {
   add(dots(''));
   add(H('IV. Trách nhiệm các bên:'));
   add(P('- Nhà thầu thi công có trách nhiệm bảo vệ, gửi mốc, kiểm tra định kỳ hệ thống mốc trong suốt quá trình thi công; phát triển lưới khống chế thi công và báo cáo Tư vấn giám sát kiểm tra trước khi sử dụng.'));
-  add(P('- Mọi sai lệch về mốc, mặt bằng so với hồ sơ thiết kế phải được các bên lập biên bản xử lý kỹ thuật hiện trường (BM-13).'));
+  add(P('- Mọi sai lệch về mốc, mặt bằng so với hồ sơ thiết kế phải được các bên lập biên bản xử lý kỹ thuật hiện trường (BM-12).'));
   add(sig([[{ t: 'TƯ VẤN QUẢN LÝ DỰ ÁN' }, { t: 'NHÀ THẦU THIẾT KẾ' }], [{ t: 'TƯ VẤN GIÁM SÁT', name: 'Lê Ngọc Đông' }, { t: 'NHÀ THẦU THI CÔNG', name: 'Đinh Trọng Bình' }]]));
   add(pb());
 }
@@ -440,34 +439,10 @@ function bm05() {
 }
 
 // =====================================================================
-// BM-06 Kiểm tra nội bộ
-// =====================================================================
-function bm06() {
-  add(formTag('BM-06', 'Kiểm tra nội bộ nhà thầu'));
-  add(quocHieu({ left: [...LD_HEAD, 'BAN CHỈ HUY CÔNG TRƯỜNG', 'Số: ....../BBNB-HT-TL'] }));
-  add(title(['BIÊN BẢN KIỂM TRA NỘI BỘ CỦA NHÀ THẦU', '(trước khi đề nghị chủ đầu tư nghiệm thu)']));
-  add(projInfo([dots('Hạng mục: ')]));
-  add(H('1. Đối tượng kiểm tra: '), dots(''));
-  add(H('2. Thành phần tham gia (Ban chỉ huy công trường – ' + NT + '):'));
-  add(P([I('(Thành viên liên danh nào thi công phần việc thì thành viên đó lập biên bản kiểm tra nội bộ)')]));
-  add(person('Đinh Trọng Bình', 'Chỉ huy trưởng'), person('Lê Công Trung', 'Cán bộ kỹ thuật thi công trực tiếp'), person('', 'Cán bộ QA/QC'), person('', 'Tổ trưởng thi công'));
-  add(H('3. Thời gian, địa điểm:'));
-  add(timeBlock());
-  add(H('4. Kết quả tự kiểm tra:'));
-  add(grid([500, 3300, 2700, 1300, 1300], ['TT', 'Nội dung kiểm tra', 'Yêu cầu thiết kế / tiêu chuẩn', 'Kết quả đo', 'Đánh giá'],
-    [['1', 'Vị trí, tim tuyến, cao độ', '', '', ''], ['2', 'Kích thước hình học', '', '', ''], ['3', 'Vật liệu sử dụng (đã được nghiệm thu)', '', '', ''], ['4', 'Kết quả thí nghiệm hiện trường', '', '', ''], ['5', 'Hồ sơ hoàn công, nhật ký thi công', '', '', '']]));
-  add(H('5. Kết luận:'));
-  add(P('□ Đạt yêu cầu, đề nghị Tư vấn giám sát nghiệm thu.       □ Chưa đạt, tiếp tục hoàn thiện: '));
-  add(dots(''));
-  add(sig([[{ t: 'CÁN BỘ KỸ THUẬT', name: 'Lê Công Trung' }, { t: 'CÁN BỘ QA/QC' }, { t: 'CHỈ HUY TRƯỞNG', name: 'Đinh Trọng Bình' }]]));
-  add(pb());
-}
-
-// =====================================================================
-// BM-07 Nghiệm thu công việc xây dựng
+// BM-06 Nghiệm thu công việc xây dựng
 // =====================================================================
 function bm07() {
-  add(formTag('BM-07', 'Nghiệm thu công việc xây dựng'));
+  add(formTag('BM-06', 'Nghiệm thu công việc xây dựng'));
   add(quocHieu());
   add(title(['BIÊN BẢN NGHIỆM THU CÔNG VIỆC XÂY DỰNG'], '......../BBNT-CV'));
   add(projInfo([P([B('Hạng mục: '), I('(ví dụ: Cống hộp đúc sẵn BxH = 2x(1,5x1,5)m ngang kênh tại Km3+500)')])]));
@@ -487,7 +462,6 @@ function bm07() {
   add(P([BI('4.1. Căn cứ nghiệm thu:')]));
   [
     '- Phiếu yêu cầu nghiệm thu số ......../PYCNT-HT-TL ngày ...../...../2026 của Nhà thầu;',
-    '- Biên bản kiểm tra nội bộ của Nhà thầu số ......../BBNB-HT-TL ngày ...../...../2026;',
     ...CANCU_PL.slice(1),
     '- Hồ sơ thiết kế bản vẽ thi công được phê duyệt theo ' + QD + ' và các thay đổi thiết kế đã được chấp thuận;',
     '- Chỉ dẫn kỹ thuật kèm theo ' + HD + ';',
@@ -518,10 +492,10 @@ function bm07() {
 }
 
 // =====================================================================
-// BM-08 Nghiệm thu giai đoạn / bộ phận
+// BM-07 Nghiệm thu giai đoạn / bộ phận
 // =====================================================================
 function bm08() {
-  add(formTag('BM-08', 'Nghiệm thu giai đoạn / bộ phận công trình'));
+  add(formTag('BM-07', 'Nghiệm thu giai đoạn / bộ phận công trình'));
   add(quocHieu());
   add(title(['BIÊN BẢN NGHIỆM THU GIAI ĐOẠN THI CÔNG XÂY DỰNG', '(HOẶC BỘ PHẬN CÔNG TRÌNH XÂY DỰNG) HOÀN THÀNH'], '......../BBNT-GĐ'));
   add(projInfo([dots('Hạng mục: ')]));
@@ -564,10 +538,10 @@ function bm08() {
 }
 
 // =====================================================================
-// BM-09 Nghiệm thu hoàn thành
+// BM-08 Nghiệm thu hoàn thành
 // =====================================================================
 function bm09() {
-  add(formTag('BM-09', 'Nghiệm thu hoàn thành hạng mục / công trình'));
+  add(formTag('BM-08', 'Nghiệm thu hoàn thành hạng mục / công trình'));
   add(quocHieu());
   add(title(['BIÊN BẢN NGHIỆM THU HOÀN THÀNH HẠNG MỤC CÔNG TRÌNH', '(CÔNG TRÌNH) XÂY DỰNG ĐỂ ĐƯA VÀO SỬ DỤNG'], '......../BBNT-HT'));
   add(projInfo());
@@ -616,17 +590,17 @@ function bm09() {
   ]));
   add(P([B('Hồ sơ nghiệm thu gồm:')], { before: 120 }));
   add(P('- Biên bản nghiệm thu hoàn thành và các phụ lục kèm theo (bảng tổng hợp khối lượng, danh mục tồn tại nếu có);'));
-  add(P('- Hồ sơ hoàn thành công trình theo danh mục BM-16;'));
+  add(P('- Hồ sơ hoàn thành công trình theo danh mục BM-15;'));
   add(P('- Các tài liệu làm căn cứ để nghiệm thu.'));
   add(P([I('Ghi chú: Đối với công trình thuộc đối tượng kiểm tra công tác nghiệm thu, chủ đầu tư chỉ đưa công trình vào sử dụng sau khi có văn bản thông báo kết quả kiểm tra của cơ quan chuyên môn về xây dựng theo quy định. Cơ quan chuyên môn không ký biên bản này.')], { before: 80 }));
   add(pb());
 }
 
 // =====================================================================
-// BM-10 Bàn giao
+// BM-09 Bàn giao
 // =====================================================================
 function bm10() {
-  add(formTag('BM-10', 'Bàn giao công trình đưa vào sử dụng'));
+  add(formTag('BM-09', 'Bàn giao công trình đưa vào sử dụng'));
   add(quocHieu());
   add(title(['BIÊN BẢN BÀN GIAO HẠNG MỤC CÔNG TRÌNH', '(CÔNG TRÌNH) XÂY DỰNG ĐƯA VÀO SỬ DỤNG'], '......../BBBG'));
   add(projInfo());
@@ -662,10 +636,10 @@ function bm10() {
 }
 
 // =====================================================================
-// BM-11 Bảng xác nhận khối lượng hoàn thành
+// BM-10 Bảng xác nhận khối lượng hoàn thành
 // =====================================================================
 function bm11() {
-  add(formTag('BM-11', 'Xác nhận khối lượng hoàn thành'));
+  add(formTag('BM-10', 'Xác nhận khối lượng hoàn thành'));
   add(quocHieu());
   add(title(['BẢNG XÁC NHẬN KHỐI LƯỢNG HOÀN THÀNH THEO HỢP ĐỒNG', '(ĐỀ NGHỊ THANH TOÁN ĐỢT .....)'], '......../XNKL'));
   add(projInfo());
@@ -685,10 +659,10 @@ function bm11() {
 }
 
 // =====================================================================
-// BM-12 Vi phạm chất lượng
+// BM-11 Vi phạm chất lượng
 // =====================================================================
 function bm12() {
-  add(formTag('BM-12', 'Kiểm tra, xử lý vi phạm chất lượng'));
+  add(formTag('BM-11', 'Kiểm tra, xử lý vi phạm chất lượng'));
   add(quocHieu());
   add(title(['BIÊN BẢN KIỂM TRA, XỬ LÝ VI PHẠM CHẤT LƯỢNG', 'TẠI HIỆN TRƯỜNG'], '......../BBVP'));
   add(H('1. Đối tượng:'));
@@ -710,10 +684,10 @@ function bm12() {
 }
 
 // =====================================================================
-// BM-13 Xử lý kỹ thuật hiện trường
+// BM-12 Xử lý kỹ thuật hiện trường
 // =====================================================================
 function bm13() {
-  add(formTag('BM-13', 'Xử lý kỹ thuật hiện trường'));
+  add(formTag('BM-12', 'Xử lý kỹ thuật hiện trường'));
   add(quocHieu());
   add(title(['BIÊN BẢN XỬ LÝ KỸ THUẬT TẠI HIỆN TRƯỜNG'], '......../BBXLKT'));
   add(H('1. Đối tượng:'));
@@ -738,10 +712,10 @@ function bm13() {
 }
 
 // =====================================================================
-// BM-14 Nhật ký thi công
+// BM-13 Nhật ký thi công
 // =====================================================================
 function bm14() {
-  add(formTag('BM-14', 'Nhật ký thi công xây dựng công trình'));
+  add(formTag('BM-13', 'Nhật ký thi công xây dựng công trình'));
   add(P([B('CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM')], { c: true, before: 0, after: 0 }));
   add(P([r('Độc lập - Tự do - Hạnh phúc', { b: true, u: true })], { c: true, after: 600 }));
   add(P([B('NHẬT KÝ THI CÔNG XÂY DỰNG CÔNG TRÌNH')], { c: true, sz: 36, after: 120 }));
@@ -799,7 +773,7 @@ function bm14() {
 }
 
 // =====================================================================
-// BM-15 Bản vẽ hoàn công
+// BM-14 Bản vẽ hoàn công
 // =====================================================================
 function stamp(cols) {
   const w = Math.floor(W / cols.length);
@@ -814,7 +788,7 @@ function stamp(cols) {
   });
 }
 function bm15() {
-  add(formTag('BM-15', 'Bản vẽ hoàn công – mẫu dấu'));
+  add(formTag('BM-14', 'Bản vẽ hoàn công – mẫu dấu'));
   add(title(['BẢN VẼ HOÀN CÔNG VÀ MẪU DẤU BẢN VẼ HOÀN CÔNG', '(Theo Phụ lục IIb Nghị định số 207/2026/NĐ-CP)']));
   add(H('1. Lập bản vẽ hoàn công:'));
   [
@@ -834,10 +808,10 @@ function bm15() {
 }
 
 // =====================================================================
-// BM-16 Danh mục hồ sơ hoàn thành
+// BM-15 Danh mục hồ sơ hoàn thành
 // =====================================================================
 function bm16() {
-  add(formTag('BM-16', 'Danh mục hồ sơ hoàn thành công trình'));
+  add(formTag('BM-15', 'Danh mục hồ sơ hoàn thành công trình'));
   add(title(['DANH MỤC HỒ SƠ HOÀN THÀNH CÔNG TRÌNH', '(Theo Điều 28 và Phụ lục VII Nghị định số 207/2026/NĐ-CP)']));
   add(P([I('Ghi chú: Chủ đầu tư tổ chức lập hồ sơ hoàn thành; mỗi nhà thầu lập và chịu trách nhiệm phần hồ sơ do mình thực hiện. Cột "Tình trạng" ghi: Có / Chưa có / Không thuộc đối tượng.')]));
   const rows = [];
@@ -858,27 +832,27 @@ function bm16() {
     'Các văn bản, tài liệu khác có liên quan đến khảo sát, thiết kế.'].forEach(it);
   grp('C. HỒ SƠ QUẢN LÝ THI CÔNG VÀ NGHIỆM THU');
   ['Danh mục các thay đổi thiết kế trong quá trình thi công và các văn bản thẩm định, phê duyệt của cấp có thẩm quyền.',
-    'Bản vẽ hoàn công (có danh mục bản vẽ kèm theo) – BM-15.',
+    'Bản vẽ hoàn công (có danh mục bản vẽ kèm theo) – BM-14.',
     'Kế hoạch tổng hợp về an toàn; biện pháp thi công; kế hoạch, biện pháp kiểm tra, kiểm soát chất lượng thi công.',
     'Biên bản bàn giao mặt bằng, tim mốc (BM-03).',
     'Chứng chỉ xuất xứ, chứng nhận chất lượng, hợp quy, hợp chuẩn, nhãn mác của vật liệu, sản phẩm, thiết bị; biên bản lấy mẫu (BM-04) và biên bản nghiệm thu vật liệu (BM-05).',
     'Các kết quả quan trắc, đo đạc, thí nghiệm trong quá trình thi công.',
-    'Nhật ký thi công xây dựng công trình (BM-14).',
-    'Các biên bản nghiệm thu công việc xây dựng (BM-07), nghiệm thu giai đoạn / bộ phận công trình (BM-08).',
+    'Nhật ký thi công xây dựng công trình (BM-13).',
+    'Các biên bản nghiệm thu công việc xây dựng (BM-06), nghiệm thu giai đoạn / bộ phận công trình (BM-07).',
     'Kết quả thí nghiệm đối chứng, kiểm định chất lượng, thí nghiệm khả năng chịu lực kết cấu (nếu có).',
-    'Biên bản xử lý kỹ thuật (BM-13), xử lý vi phạm chất lượng (BM-12) và hồ sơ giải quyết sự cố công trình (nếu có).',
+    'Biên bản xử lý kỹ thuật (BM-12), xử lý vi phạm chất lượng (BM-11) và hồ sơ giải quyết sự cố công trình (nếu có).',
     'Lý lịch thiết bị lắp đặt; quy trình vận hành, khai thác; quy trình bảo trì công trình.',
     'Văn bản chấp thuận của cơ quan có thẩm quyền về phòng cháy chữa cháy, môi trường, an toàn vận hành (nếu thuộc đối tượng).',
     'Văn bản thông báo kết quả kiểm tra công tác nghiệm thu của cơ quan chuyên môn về xây dựng (nếu thuộc đối tượng) và hồ sơ liên quan đến việc kiểm tra.',
-    'Biên bản nghiệm thu hoàn thành hạng mục công trình / công trình (BM-09) và phụ lục tồn tại cần khắc phục (nếu có).',
-    'Biên bản bàn giao công trình đưa vào sử dụng (BM-10).',
+    'Biên bản nghiệm thu hoàn thành hạng mục công trình / công trình (BM-08) và phụ lục tồn tại cần khắc phục (nếu có).',
+    'Biên bản bàn giao công trình đưa vào sử dụng (BM-09).',
     'Các hồ sơ, tài liệu khác có liên quan trong giai đoạn thi công và nghiệm thu.'].forEach(it);
   add(grid([600, 6000, 1300, 1200], ['TT', 'Tên hồ sơ, tài liệu', 'Tình trạng', 'Ghi chú'], rows));
   add(sig([[{ t: 'TƯ VẤN GIÁM SÁT', n: '(Ký, ghi rõ họ tên)' }, { t: 'NHÀ THẦU THI CÔNG', n: '(Ký, ghi rõ họ tên)' }]]));
 }
 
 cover(); toTrinh(); danhMuc();
-bm01(); bm02(); bm03(); bm04(); bm05(); bm06(); bm07(); bm08();
+bm01(); bm02(); bm03(); bm04(); bm05(); bm07(); bm08();
 bm09(); bm10(); bm11(); bm12(); bm13(); bm14(); bm15(); bm16();
 
 const doc = new Document({
